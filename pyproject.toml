@@ -1,0 +1,61 @@
+[project]
+name = "pytfenv"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-hcl2>=4.3.5",
+    "semver>=3.0.2",
+    "typer>=0.12.5",
+]
+
+[project.scripts]
+hello = "pytfenv:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pre-commit>=3.8.0",
+    "pytest>=8.3.3",
+    "ruff>=0.6.9",
+    "taskipy>=1.13.0",
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
+
+[tool.ruff]
+extend-exclude = ["examples/"]
+src = ["src", "tests"]
+fix = true
+show-fixes = true
+output-format = "full"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "B",  # flake8-bugbear
+    "E",  # pycodestyle error
+    "F",  # pyflakes
+    "I",  # isort
+    "UP",  # pyupgrade
+    "W",  # pycodestyle warning
+]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+order-by-type = false
+
+[tool.taskipy.tasks]
+lint = "pre-commit run --all-files"
+test = "pytest -v --cov  --cov-report=html"
+docs = "typer assists.main utils docs --output DOCS.md --name ast"
+ci   = "task lint && task test"
